@@ -6,9 +6,11 @@ const ExampleComponent = () => {
 
   useEffect(() => {
     // Get the server URL from environment variables or use a default value
-    const apiUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001/api/data';
+    const apiUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001';
+    const fullUrl = `${apiUrl}/api/data`;
+    
 
-    axios.get(apiUrl)
+    axios.get(fullUrl)
       .then(response => {
         setData(response.data);
         console.log('Data:', response.data); // Log the data to the console
