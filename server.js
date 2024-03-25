@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors'); // Import the cors middleware
-
+const path = require('path');
 const app = express();
 
 // Use the cors middleware to enable CORS
