@@ -19,15 +19,12 @@ const connection = mysql.createConnection({
 // Connect to MySQL
 connection.connect();
 
-app.get('/users', (req, res) => {
-  connection.query("SELECT * FROM cities", (err, result) => {
-      if (err) {
-          return res.json(err);
-      } else {
-          res.json(result);
-      }
-  })
-})
+app.use(express.static(path.join(__dirname, 'client/src')));
+
+// Route for the root URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
+});
 
 // Define API route to fetch data from the SQL database
 app.get('/api/data', (req, res) => {
