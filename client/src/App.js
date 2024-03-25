@@ -5,7 +5,10 @@ const ExampleComponent = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/data')
+    // Get the server URL from environment variables or use a default value
+    const apiUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:3001/api/data';
+
+    axios.get(apiUrl)
       .then(response => {
         setData(response.data);
         console.log('Data:', response.data); // Log the data to the console
