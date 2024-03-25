@@ -1,0 +1,21 @@
+{
+  "name": "db-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "mysql": "^2.18.1"
+  }
+}
