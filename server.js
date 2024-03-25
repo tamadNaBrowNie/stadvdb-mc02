@@ -23,6 +23,14 @@ app.use(express.static(path.join(__dirname, 'client/src')));
 
 // Route for the root URL
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/public', 'homePage.html'));
+});
+
+app.get('/luzon', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
+});
+
+app.get('/vismin', (req, res) => {
   res.sendFile(path.join(__dirname, 'client/public', 'index.html'));
 });
 
