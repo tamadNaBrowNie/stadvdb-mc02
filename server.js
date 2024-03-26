@@ -52,7 +52,7 @@ app.get('/api/data', (req, res) => {
 });
 
 app.get('/api/data-replica', (req, res) => {
-  connection.query("SELECT * FROM Manila", (err, result) => {
+  connection_replica.query("SELECT * FROM Manila", (err, result) => {
     if (err) {
         return res.status(500).json({ error: err.message });
     } else {
