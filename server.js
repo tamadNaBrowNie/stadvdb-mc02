@@ -65,16 +65,6 @@ app.get('/api/data', (req, res) => {
   })
 });
 
-app.get('/api/data-replica', (req, res) => {
-  connection_replica.query("SELECT * FROM Manila", (err, result) => {
-    if (err) {
-        return res.status(500).json({ error: err.message });
-    } else {
-        res.json(result);
-    }
-  })
-});
-
 app.post('/api/insert', (req, res) => {
   const { city, population } = req.body;
 
