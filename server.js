@@ -24,8 +24,22 @@ const connection_replica = mysql.createConnection({
   port: "3306"
 });
 
-connection.connect();
-connection_replica.connect();
+connection.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL database');
+});
+
+
+connection_replica.connect((err) => {
+  if (err) {
+    console.error('Error connecting to MySQL:', err);
+    return;
+  }
+  console.log('Connected to MySQL database');
+});
 
 app.use(express.static('client/public'));
 
