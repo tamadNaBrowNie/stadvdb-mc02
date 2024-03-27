@@ -17,7 +17,7 @@ const connection = mysql.createConnection({
 
 // Replica of the database - should be read only
 const connection_replica = mysql.createConnection({
-  host: 'database-node2.cdkmeqmso4yh.ap-southeast-2.rds.amazonaws.com',
+  host: 'database-luzon.cdkmeqmso4yh.ap-southeast-2.rds.amazonaws.com',
   user: 'admin',
   password: 'admin123',
   database: 'stadvdb',
