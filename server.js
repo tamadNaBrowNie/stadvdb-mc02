@@ -55,7 +55,7 @@ function reconnectToDatabases() {
   ({ connection, connectionReplica } = connectToDatabases());
 }
 
-// Reconnect to databases every 10 seconds
+// Reconnect to databases every 10 seconds (maybe 10 secs is too short)
 setInterval(reconnectToDatabases, 10 * 1000);
 
 app.use(express.static('client/public'));
