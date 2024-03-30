@@ -17,6 +17,7 @@ function connectToDatabases() {
     port: "3306"
   });
 
+
   connection.connect((err) => {
     if (err) {
       console.error('Error connecting to main MySQL database:', err);
