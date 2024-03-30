@@ -4,7 +4,7 @@ function fetchDataAndDisplayInHTML() {
     fetch('/api/data')
       .then(response => response.json())
       .then(data => {
-        dataContainer.innerHTML = '<h2>Fetched Data</h2>';
+        dataContainer.innerHTML = '<h2>Fetched Data - Luzon</h2>';
         data.forEach(item => {
           const listItem = document.createElement('div');
           listItem.textContent = `${item.city}: ${item.population}`;
