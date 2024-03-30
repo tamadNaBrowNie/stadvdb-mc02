@@ -5,64 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Luzon Page</title>
   <style> /* Since we are just testing, didn't make a separate css file */
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      margin: 0;
-      padding: 0;
+    .container {
+    max-width: 1500px;
+    margin: 50px auto;
+    padding: 10px;
+    }
+    h1, h2 {
+        font-family: "Verdana", sans-serif;
+    }
+    h2{
+        color: rgb(67, 67, 67);
     }
 
-    #insertForm {
-      width: 300px;
-      margin: 20px auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    input[type="text"] , 
+    input[type="number"]{
+        width: calc(50% - 5px);
+        margin-bottom: 10px;
+        padding: 8px;
+        width: 250px;
     }
 
-    label {
-      display: block;
-      margin-bottom: 5px;
+    button {
+        padding: 8px 20px;
+        background-color: #58bcc9;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 10px;
     }
 
-    input[type="text"], input[type="number"] {
-      width: calc(100% - 10px);
-      padding: 8px;
-      margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    button:hover {
+        background-color: #83e4dc;
+    }
+    #population {
+        margin-bottom: 40px;
+        margin-left: 8px;
+        margin-right: 10px;
+    }
+    #searchInput {
+        width: 200px;
+    }
+    #dataTable {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
     }
 
-    button[type="submit"] {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
+    #dataTable th, #dataTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
     }
 
-    button[type="submit"]:hover {
-      background-color: #0056b3;
+    #dataTable th {
+        background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <div id="root"></div>
-  <div id="dataContainer"></div>
-
-  <form id="insertForm">
-    <h2>Perform Insertion</h2>
-    <label for="city">City:</label>
-    <input type="text" id="city" name="city" required><br>
-    <label for="population">Population:</label>
-    <input type="number" id="population" name="population" required><br>
-    <button type="submit">Submit</button>
-  </form>
+  <div class="container">
+    <h1>APPOINTMENTS RECORDS</h1>
+    <h2>Insert data:</h2>
+    <form id="insertForm">
+        <input type="text" id="city" name="city" placeholder="Enter City" required>
+        <input type="number" id="population" name="population" placeholder="Enter Population" required>
+        <button type="submit" id="addBtn">Insert</button>
+    </form>
+    <h2>Fetched data:</h2>
+    <input type="text" id="searchInput" placeholder="Search...">
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>City</th>
+                <th>Population</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="dataBody"></tbody>
+    </table>
+  </div>
 
   <script>
+    /*
     document.getElementById('insertForm').addEventListener('submit', function(event) {
       event.preventDefault();
     
@@ -90,9 +115,142 @@
         console.error('Error:', error);
         alert('Error inserting data!');
       });
+    });*/
+    let data = [
+    {id: '1', city: 'Makati', population: '10000'},
+    {id: '2', city: 'Pasay', population: '83000'},
+    {id: '3', city: 'Taguig', population: '2900'}
+    ];
+
+    function renderData() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filteredData =data.filter(item =>
+            item.city.toLowerCase().includes(searchTerm)
+        );
+        const dataBody = document.getElementById('dataBody');
+
+        dataBody.innerHTML = '';
+        filteredData.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.id}</td>
+                <td>${item.city}</td>
+                <td>${item.population}</td>
+                <td>
+                    <button onclick="editRow(this)">Edit</button>
+                    <button onclick="deleteItem('${item.id}')">Delete</button>
+                    <button style="display: none;" onclick="updateItem(this, '${item.id}')">Update</button>
+                    <button style="display: none;">Cancel</button>
+                </td>`;
+            dataBody.appendChild(row);
+        });
+    }
+    //nextID for added item
+    const maxId = Math.max(...data.map(item => parseInt(item.id)));
+
+    //add row
+    function addItem(city, population) {
+        const newItem = {
+            id:(maxId + 1).toString(),
+            city,
+            population
+        };
+        data.push(newItem);
+        renderData();
+    }
+
+    //delete row
+    function deleteItem(id) {
+        const confirmation = confirm('Are you sure you want to delete this?');
+        if (confirmation) {
+            data = data.filter(item => item.id !== id);
+            renderData();
+        }
+    }
+
+    //edit row
+    function editRow(button) {
+        const row = button.parentNode.parentNode;
+        const cells = row.querySelectorAll('td:not(:last-child)');
+        cells.forEach(cell => {
+            const text = cell.innerText;
+            cell.innerHTML = `<input type="text" value="${text}">`;
+        });
+        const editButton = row.querySelector('button:nth-child(1)');
+        const deleteButton = row.querySelector('button:nth-child(2)');
+        const updateButton = row.querySelector('button:nth-child(3)');
+        const cancelButton = row.querySelector('button:nth-child(4)');
+        editButton.style.display = 'none';
+        deleteButton.style.display = 'none';
+        updateButton.style.display = 'inline-block';
+        cancelButton.style.display = 'inline-block';
+
+        cancelButton.addEventListener('click', function() {
+            cancelEdit(row);
+        });
+    }
+    //update row
+    function updateItem(button, id) {
+        const row = button.parentNode.parentNode;
+        const cells = row.querySelectorAll('td:not(:last-child)');
+        const newData ={};
+        cells.forEach((cell, index) => {
+            const input = cell.querySelector('input');
+            switch(index) {
+                case 0:
+                    newData['id'] = id;//remain unchanged
+                    break;
+                case 1:
+                    newData['city'] = input.value.trim();
+                    break;
+                case 2:
+                    newData['population'] = input.value.trim();
+                    break;
+                default:
+                    break;
+            }
+        });
+        const itemIndex = data.findIndex(item => item.id === id);
+        if(itemIndex !== -1){
+            data[itemIndex] = {
+                ...data[itemIndex],
+                ...newData
+            };
+            renderData();
+        }
+    }
+
+    //cancel edit
+    function cancelEdit(row) {
+        renderData();
+    }
+
+
+    window.onload = renderData;
+
+    //for form submission
+    document.getElementById('insertForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const cityInput = document.getElementById('city');
+        const populationInput = document.getElementById('population');
+        const city = cityInput.value.trim();
+        const population = populationInput.value.trim();
+        if (city !== '' && population !== '') {
+            addItem(city, population);
+            cityInput.value= '';
+            populationInput.value= '';
+        } else {
+            alert('Please enter both city and population.');
+        }
     });
+
+    //for search input
+    document.getElementById('searchInput').addEventListener('input', renderData);
+
+
   </script>
 
-  <script src="scripts/luzonScript.js"></script>
+  <!-- <script src="scripts/luzonScript.js"></script> -->
 </body>
 </html>
