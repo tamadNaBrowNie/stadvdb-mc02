@@ -48,7 +48,15 @@ function connectToDatabases() {
 }
 
 // Call the function to connect to databases
-const { connection, connectionReplica } = connectToDatabases();
+let { connection, connectionReplica } = connectToDatabases();
+
+function reconnectToDatabases() {
+  // Call connectToDatabases() again to refresh the connections
+  ({ connection, connectionReplica } = connectToDatabases());
+}
+
+// Reconnect to databases every 10 seconds
+setInterval(reconnectToDatabases, 10 * 1000);
 
 app.use(express.static('client/public'));
 
